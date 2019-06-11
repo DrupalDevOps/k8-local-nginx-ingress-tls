@@ -1,0 +1,31 @@
+# This load balancer receives traffic on HTTP and HTTPS ports 80 and 443,
+# and forwards it to the Ingress Controller Pod.
+#
+# The Ingress Controller will then route the traffic to the appropriate backend Service.
+# Point DNS records at this external Load Balancer and
+# create some Ingress Resources to implement traffic routing rules.
+
+kind: Service
+apiVersion: v1
+metadata:
+  name: ingress-nginx
+  namespace: ingress-nginx
+  labels:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+spec:
+  externalTrafficPolicy: Local
+  type: LoadBalancer
+  selector:
+    app.kubernetes.io/name: ingress-nginx
+    app.kubernetes.io/part-of: ingress-nginx
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+    - name: https
+      port: 443
+      targetPort: https
+
+---
+
